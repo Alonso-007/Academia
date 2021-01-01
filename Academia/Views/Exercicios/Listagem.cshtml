@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Academia.Dominio.Models.Exercicio>
+
+@{
+    ViewData["Title"] = "Escolha seus exercicios";
+}
+
+<h5>Escolha seus exercicios</h5>
+
+<table class="table striped hover highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoriaExercicio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoriaExercicio.Nome)
+                </td>
+                <td>
+                    <a onclick="ExibirModal('@item.ExercicioId', '@ViewData["FichaId"]')" class="btn-small light-blue darken-2">Adicionar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" asp-controller="Fichas" asp-route-AlunoId="@ViewData["AlunoId"]"></a>
+
+<!-- Modal Structure -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <h4>Adicionar exercício</h4>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="Frequencia" type="text" class="validate" />
+                <label for="Frequencia">Frequência</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="Repeticoes" type="text" class="validate" />
+                <label for="Repeticoes">Repetições</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="Carga" type="text" class="validate" />
+                <label for="Carga">Carga</label>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close btn green accent-4">Não</a>
+        <a class="modal-close btn red accent-4 btnConfirmar">Sim</a>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $(".modal").modal();
+        });
+
+        function ExibirModal(exercicioId, fichaId) {
+
+            $("#modal").modal("open");
+
+            $(".btnConfirmar").on("click", function (e) {
+
+                let frequencia = parseInt($("#Frequencia").val());
+                let repeticoes = parseInt($("#Repeticoes").val());
+                let carga = parseInt($("#Carga").val());
+
+                if ((Number.isInteger(frequencia) && frequencia > 0)
+                    && (Number.isInteger(repeticoes) && repeticoes > 0)
+                    && (Number.isInteger(carga) && carga > 0)) {
+
+                    $.ajax({
+                        method: "POST",
+                        url: "/Exercicios/AdicionarExercicio",
+                        data: { exercicioId, frequencia, repeticoes, carga, fichaId },
+                        success: function (data) {
+                            if (data) {
+                                $("modal").modal("close");
+                                $("modal").modal("destroy");
+                                $(".modal").modal("close");
+                                $(".btnConfirmar").unbind("click");
+                                $("#Frequencia").val("");
+                                $("#Repeticoes").val("");
+                                $("#Carga").val("");
+                                M.toast({ html: "Exercicio inserido com sucesso" });
+                            } else {
+                                $("modal").modal("close");
+                                $("modal").modal("destroy");
+                                $(".modal").modal("close");
+                                $(".btnConfirmar").unbind("click");
+                                $("#Frequencia").val("");
+                                $("#Repeticoes").val("");
+                                $("#Carga").val("");
+                                M.toast({ html: "Exercicio já conta na ficha" });
+                            }
+                        }
+                    });
+                } else {
+                    $("modal").modal("close");
+                    $("modal").modal("destroy");
+                    $(".modal").modal("close");
+                    $(".btnConfirmar").unbind("click");
+                    $("#Frequencia").val("");
+                    $("#Repeticoes").val("");
+                    $("#Carga").val("");
+                    M.toast({ html: "Informações inválidas" });
+                }
+            });
+        }
+    </script>
+
+}

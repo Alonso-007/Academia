@@ -1,0 +1,99 @@
+﻿@model Academia.Dominio.Models.Professor
+
+@{
+    ViewData["Title"] = "Atualizar " + Model.Nome;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="collection s12">
+            <div class="collection with-header">
+                <h6 class="collection-header">Atualizar @Model.Nome</h6>
+                <form asp-action="Edit" enctype="multipart/form-data">
+
+                    <div class="collection-item">
+                        <div asp-validation-summary="ModelOnly" class="red-text darken-3"></div>
+
+                        <input type="hidden" asp-for="ProfessorId" />
+
+                        <div class="row">
+                            <div class="input-field">
+                                <input asp-for="Nome" class="validate" id="nome" />
+                                <label for="Nome">Nome</label>
+                                <span asp-validation-for="Nome" class="red-text darken-3"></span>
+                            </div>
+                        </div>
+
+                        @if (Model.Foto != null)
+                        {
+                            <img id="imagem" src="@Url.Content(Model.Foto)" alt="Foto" height="250" width="250"/>
+                        }
+                        else
+                        {
+                            <img id="imagem" src="#" alt="Foto" />
+                        }
+                        <div class="row">
+                            <div class="file-field input-field">
+                                <div class="btn-small">
+                                    <span>Selecione a foto</span>
+                                    <input asp-for="Foto" type="file" id="arquivo" onchange="CarregarImagem(this)" />
+                                    <span asp-validation-for="Nome" class="red-text darken-3"></span>
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path-wrapper validate" type="text" placeholder="Faça o upload da foto" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field">
+                                <input asp-for="Telefone" class="validate" id="telefone" />
+                                <label for="Telefone">Telefone</label>
+                                <span asp-validation-for="Telefone" class="red-text darken-3"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field">
+                                <input asp-for="Turno" class="validate" id="turno" />
+                                <label for="Nome">Turno</label>
+                                <span asp-validation-for="Turno" class="red-text darken-3"></span>
+                            </div>
+                        </div>
+
+                        <div class="collection-item">
+                            <input type="submit" value="Atualizar" class="btn-small blue darken-3" />
+                            &nbsp;
+                            <a asp-action="Index" class="btn-small grey darken-1">Voltar</a>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+
+    <script>
+        function CarregarImagem(input) {
+            if (input.files && input.file[0]) {
+                var reader = new FileReader();
+                $("#imagem").show();
+
+                reader.onload = function (e) {
+                    $("#imagem").attr('srd', e.target.result).width(250).height(250);
+                };
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        $(function () {
+            $("#telefone").mask("(99) 9 9999-9999");
+        });
+    </script>
+}

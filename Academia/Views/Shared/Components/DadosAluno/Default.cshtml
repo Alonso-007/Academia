@@ -1,0 +1,36 @@
+﻿@model Academia.Dominio.Models.Aluno
+
+<div>
+    <h5>Dados do Aluno</h5>
+    <hr />
+
+    <div class="row">
+
+        <div class="col-sm-10 s4">
+            <p><strong>Nome : </strong>@Model.NomeCompleto</p>
+        </div>
+
+        <div class="col-sm-10 s4">
+            <p><strong>Idade : </strong>@Model.Idade</p>
+        </div>
+
+        <div class="col-sm-10 s4">
+            <p><strong>Peso : </strong>@Model.Peso</p>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-10 s4">
+            <p><strong>Objetivo : </strong>@Model.Objetivo</p>
+        </div>
+
+        <div class="col-sm-10 s4">
+            <p><strong>Descrição : </strong>@Model.Objetivo.Descricao</p>
+        </div>
+
+        <div class="col-sm-10 s4">
+            <p><strong>Professor : </strong>@Model.Professor.Nome</p>
+        </div>
+    </div>
+</div>
